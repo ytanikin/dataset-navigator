@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.ytanikin.xmlwalker.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.ytanikin.xmlwalker.MyBundle
 
 class MyApplicationService {
 
