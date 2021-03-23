@@ -1,4 +1,4 @@
-# xml-walker
+# xml-dataset-walker
 
 ![Build](https://github.com/ytanikin/xml-walker/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)

@@ -1,6 +1,6 @@
-package com.github.ytanikin.xmlwalker.services
+package com.ytanikin.xmldatasetwalker.services
 
-import com.github.ytanikin.xmlwalker.MyBundle
+import com.ytanikin.xmldatasetwalker.MyBundle
 import com.intellij.openapi.project.Project
 
 class MyProjectService(project: Project) {

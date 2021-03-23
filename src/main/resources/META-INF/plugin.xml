@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>com.github.ytanikin.xmlwalker</id>
-    <name>xml-walker</name>
+    <id>com.ytanikin.xmlwalker</id>
+    <name>Xml Dataset Walker</name>
     <vendor>ytanikin</vendor>
 
     <!-- Product and plugin compatibility requirements -->
@@ -8,12 +8,24 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.ytanikin.xmlwalker.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.ytanikin.xmlwalker.services.MyProjectService"/>
+<!--        <applicationService serviceImplementation="com.ytanikin.xmldatasetwalker.services.MyApplicationService"/>-->
+<!--        <projectService serviceImplementation="com.ytanikin.xmldatasetwalker.services.MyProjectService"/>-->
+<!--        <postStartupActivity implementation="com.ytanikin.xmldatasetwalker.services.PostAction"/>-->
+<!--        <findUsagesHandlerFactory implementation="com.ytanikin.xmldatasetwalker.services.FindEntityUsagesFactory" id="xml" order="first, before default"/>-->
+<!--        <lang.findUsagesProvider language="XML" implementationClass="com.ytanikin.xmldatasetwalker.services.FindEntityUsages" order="first"/>-->
+<!--        <customUsageSearcher implementation="com.ytanikin.xmldatasetwalker.services.EntityCustomUsageSearcher" id="xml" order="first"/>-->
+        <dom.fileMetaData implementation="com.ytanikin.xmldatasetwalker.filemetadata.DatasetDescription" rootTagName="dataset"/>
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.ytanikin.xmldatasetwalker.provider.XmlLineMarkerProvider"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.ytanikin.xmlwalker.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+<!--    <applicationListeners>-->
+<!--        <listener class="com.ytanikin.xmldatasetwalker.listeners.MyProjectManagerListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
+<!--    </applicationListeners>-->
+<!---->
+<!--    <actions>-->
+<!--        <action id="com.ytanikin.xmldatasetwalker.services.FindAction" class="com.ytanikin.xmldatasetwalker.services.FindAction" text="GoTo" description="GoToOrFindUsages">-->
+<!--            <add-to-group group-id="FindUsagesMenuGroup" anchor="first"/>-->
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt b"/>-->
+<!--        </action>-->
+<!--    </actions>-->
 </idea-plugin>

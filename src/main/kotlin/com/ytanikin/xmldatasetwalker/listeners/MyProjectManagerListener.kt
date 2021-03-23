@@ -1,6 +1,6 @@
-package com.github.ytanikin.xmlwalker.listeners
+package com.ytanikin.xmldatasetwalker.listeners
 
-import com.github.ytanikin.xmlwalker.services.MyProjectService
+import com.ytanikin.xmldatasetwalker.services.MyProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener

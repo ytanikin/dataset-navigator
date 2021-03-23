@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# xml-walker Changelog
+# xml-dataset-walker Changelog
 
 ## [Unreleased]
 ### Added
