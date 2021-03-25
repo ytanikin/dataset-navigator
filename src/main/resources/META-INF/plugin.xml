@@ -14,8 +14,9 @@
 <!--        <findUsagesHandlerFactory implementation="com.ytanikin.xmldatasetwalker.services.FindEntityUsagesFactory" id="xml" order="first, before default"/>-->
 <!--        <lang.findUsagesProvider language="XML" implementationClass="com.ytanikin.xmldatasetwalker.services.FindEntityUsages" order="first"/>-->
 <!--        <customUsageSearcher implementation="com.ytanikin.xmldatasetwalker.services.EntityCustomUsageSearcher" id="xml" order="first"/>-->
-        <dom.fileMetaData implementation="com.ytanikin.xmldatasetwalker.filemetadata.DatasetDescription" rootTagName="dataset"/>
-        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.ytanikin.xmldatasetwalker.provider.XmlLineMarkerProvider"/>
+        <psi.referenceContributor implementation="com.ytanikin.xmldatasetwalker.provider.XmlPsiReferenceContributor"/>
+<!--        <dom.fileMetaData implementation="com.ytanikin.xmldatasetwalker.filemetadata.DatasetDescription" rootTagName="dataset"/>-->
+<!--        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.ytanikin.xmldatasetwalker.provider.XmlLineMarkerProvider"/>-->
     </extensions>
 
 <!--    <applicationListeners>-->
