@@ -14,28 +14,47 @@ import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.xml.XmlAttribute;
 
-public class XmlReferenceJava<T extends PsiElement> extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class XmlReferenceJava extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
 
-    private final List<T> targets;
+    private final List<XmlAttribute> targets;
 
-    private final List<T> variants;
+    private final List<XmlAttribute> variants;
 
-    private final Function<T, String> getLookupString;
+    private final Function<XmlAttribute, String> getLookupString;
 
-    public XmlReferenceJava(PsiElement element, List<T> targets) {
+    public XmlReferenceJava(PsiElement element, List<XmlAttribute> targets) {
         super(element, new TextRange(0, element.getText().length() - 1));
         this.targets = targets;
         this.getLookupString = PsiElement::getText;
         this.variants = targets;
     }
 
+    public XmlReferenceJava(@NotNull PsiElement element, List<XmlAttribute> targets, List<XmlAttribute> variants) {
+        super(element, new TextRange(0, element.getText().length() - 1));
+        this.targets = targets;
+        this.getLookupString = PsiElement::getText;
+        this.variants = variants;
+    }
+
+    public XmlReferenceJava(@NotNull PsiElement element, List<XmlAttribute> targets, List<XmlAttribute> variants, Function<XmlAttribute, String> getLookupString) {
+        super(element, new TextRange(0, element.getText().length() - 1));
+        this.targets = targets;
+        this.variants = variants;
+        this.getLookupString = getLookupString;
+    }
+
     @Override
     public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
-        return CollectionUtils.isEmpty(targets) ? new ResolveResult[0] : targets
-                .stream()
+        if (CollectionUtils.isEmpty(targets)) {
+            return new ResolveResult[0];
+        }
+
+        ResolveResult[] resolveResults = targets.stream()
                 .map(PsiElementResolveResult::new)
                 .toArray(ResolveResult[]::new);
+        return resolveResults;
     }
 
     @Override

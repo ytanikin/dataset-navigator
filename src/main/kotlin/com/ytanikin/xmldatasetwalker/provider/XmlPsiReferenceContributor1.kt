@@ -3,7 +3,7 @@ package com.ytanikin.xmldatasetwalker.provider
 import com.intellij.patterns.XmlNamedElementPattern
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
-import com.intellij.psi.PsiReferenceRegistrar.HIGHER_PRIORITY
+import com.intellij.psi.PsiReferenceRegistrar.DEFAULT_PRIORITY
 import com.intellij.psi.impl.cache.CacheManager
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.UsageSearchContext
@@ -12,43 +12,44 @@ import com.intellij.psi.xml.XmlFile
 import com.intellij.util.ProcessingContext
 
 
-open class XmlPsiReferenceContributor : PsiReferenceContributor() {
+open class XmlPsiReferenceContributor1 : PsiReferenceContributor() {
     val SQL_PATTERN: XmlNamedElementPattern.XmlAttributePattern = XmlPatterns.xmlAttribute().withName("INVOICE")
-
-    //    private val SQL_PATTERN: XmlAttributeValuePattern = XmlPatterns.xmlAttributeValue()
+//    private val SQL_PATTERN: XmlAttributeValuePattern = XmlPatterns.xmlAttributeValue()
 //        .withParent(XmlPatterns.xmlAttribute().withName("INVOICE"))
-    private val withName = XmlPatterns.xmlAttribute().withName("ID")
+    override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
+    val withName = XmlPatterns.xmlAttribute().withName("ID")
         .withParent(
             XmlPatterns.xmlTag().withName("CUSTOMER")
                 .withParent(XmlPatterns.xmlTag().withName("dataset"))
         )
-    override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        registrar.registerReferenceProvider(withName, XmlPsiReferenceProvider(), 1000.0)
-    }
+//        .withParent(XmlPatterns.xmlTag().withName("dataset"))
+    registrar.registerReferenceProvider(withName, XmlPsiReferenceProvider(), DEFAULT_PRIORITY)
+}
 
     private class XmlPsiReferenceProvider : PsiReferenceProvider() {
-
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-            val usages = mutableListOf<XmlAttribute>()
+            val references = mutableListOf<XmlReferenceJava>()
+
             if (element is XmlAttribute) {
-                val entityName = element.parent.name
-                val name = element.value
-                val entityWithId = "${entityName}_ID"
-                val cacheManager = CacheManager.getInstance(element.getProject())
-                val xmlFiles = cacheManager.getFilesWithWord(
-                    entityWithId, UsageSearchContext.ANY,
-                    GlobalSearchScope.projectScope(element.getProject()), true
-                ).filterIsInstance<XmlFile>()
-                for (xmlFile in xmlFiles) {
-                    for (tag in xmlFile.rootTag?.subTags!!) { // TODO: 25.03.2021 NPE
-                        val attribute = tag.getAttribute(entityWithId)
-                        if (attribute != null && attribute.value == name) {
-                            usages.add(attribute)
-                            break;
+
+                    val entityName = element.parent.name
+                    val name = element.value
+                    val entityWithId = "${entityName}_ID"
+                    val cacheManager = CacheManager.getInstance(element.getProject())
+                    val xmlFiles = cacheManager.getFilesWithWord(
+                        entityWithId, UsageSearchContext.ANY,
+                        GlobalSearchScope.projectScope(element.getProject()), true
+                    ).filterIsInstance<XmlFile>()
+                    val usages = mutableListOf<XmlAttribute>()
+                    for (xmlFile in xmlFiles) {
+                        for (tag in xmlFile.rootTag?.subTags!!) { // TODO: 25.03.2021 NPE
+                            val attribute = tag.getAttribute(entityWithId)
+                            if (attribute != null && attribute.value == name) {
+                                return arrayOf(XmlReferenceJava(element as PsiElement, listOf(attribute)))
+                            }
                         }
                     }
-                }
-
+                    references.add(XmlReferenceJava(element, usages))
 
 
 //                    for (column in entity.attributes) {
@@ -57,7 +58,7 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
 //                        }
 //                    }
             }
-            return arrayOf(XmlReference(element, usages));
+            return references.toTypedArray()
 
             /*
             if (element is XmlAttributeImpl) {
