@@ -3,6 +3,7 @@ package com.ytanikin.datasetnavigator.contributor
 import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
+import com.intellij.psi.PsiReferenceRegistrar.HIGHER_PRIORITY
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
@@ -12,9 +13,9 @@ import com.ytanikin.datasetnavigator.XmlHelper
 open class XmlPsiReferenceContributor : PsiReferenceContributor() {
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        registrar.registerReferenceProvider(ID_PATTERN, ID_REFERENCE_CONTRIBUTOR,  100000000.0)
-        registrar.registerReferenceProvider(ENTITY_PATTERN, ENTITY_REFERENCE_CONTRIBUTOR,  10000000000.0)
-        registrar.registerReferenceProvider(FOREIGN_KEY_PATTERN, FOREIGN_KEY_REFERENCE_CONTRIBUTOR,  100000000000000.0)
+        registrar.registerReferenceProvider(ID_PATTERN, ID_REFERENCE_CONTRIBUTOR,  HIGHER_PRIORITY)
+        registrar.registerReferenceProvider(ENTITY_PATTERN, ENTITY_REFERENCE_CONTRIBUTOR,  HIGHER_PRIORITY)
+        registrar.registerReferenceProvider(FOREIGN_KEY_PATTERN, FOREIGN_KEY_REFERENCE_CONTRIBUTOR,  HIGHER_PRIORITY)
     }
 
     private class IdPsiReferenceProvider : PsiReferenceProvider() {
