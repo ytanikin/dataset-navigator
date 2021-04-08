@@ -8,7 +8,7 @@ import com.intellij.psi.xml.XmlElement
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 
-object XmlHelper {
+object Utils {
     const val DATASET_ROOT_TAG = "dataset"
     const val ID_POSTFIX = "_ID"
     const val ID_ATTRIBUTE = "ID"

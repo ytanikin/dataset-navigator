@@ -7,11 +7,11 @@ import com.intellij.psi.PsiReferenceRegistrar.HIGHER_PRIORITY
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
-import com.ytanikin.datasetnavigator.XmlHelper.DATASET_ROOT_TAG
-import com.ytanikin.datasetnavigator.XmlHelper.ID_ATTRIBUTE
-import com.ytanikin.datasetnavigator.XmlHelper.ID_POSTFIX
-import com.ytanikin.datasetnavigator.XmlHelper.findDeclarations
-import com.ytanikin.datasetnavigator.XmlHelper.findUsages
+import com.ytanikin.datasetnavigator.Utils.DATASET_ROOT_TAG
+import com.ytanikin.datasetnavigator.Utils.ID_ATTRIBUTE
+import com.ytanikin.datasetnavigator.Utils.ID_POSTFIX
+import com.ytanikin.datasetnavigator.Utils.findDeclarations
+import com.ytanikin.datasetnavigator.Utils.findUsages
 
 
 open class XmlPsiReferenceContributor : PsiReferenceContributor() {

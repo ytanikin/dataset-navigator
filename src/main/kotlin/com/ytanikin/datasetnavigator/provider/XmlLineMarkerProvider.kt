@@ -8,8 +8,8 @@ import com.intellij.ide.util.PsiElementListCellRenderer
 import com.intellij.psi.PsiElement
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
-import com.ytanikin.datasetnavigator.XmlHelper.ID_ATTRIBUTE
-import com.ytanikin.datasetnavigator.XmlHelper.findUsages
+import com.ytanikin.datasetnavigator.Utils.ID_ATTRIBUTE
+import com.ytanikin.datasetnavigator.Utils.findUsages
 import javax.swing.Icon
 
 open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
