@@ -1,1 +1,1 @@
-rootProject.name = "xml-dataset-walker"
+rootProject.name = "dataset-navigator"

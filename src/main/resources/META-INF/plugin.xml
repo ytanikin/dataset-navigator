@@ -1,11 +1,13 @@
 <idea-plugin>
-    <id>com.ytanikin.xmlwalker</id>
-    <name>Xml Dataset Walker</name>
+    <id>com.ytanikin.datasetnavigator</id>
+    <name>Dataset Navigator</name>
     <vendor>ytanikin</vendor>
-
+    <version>0.2</version>
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <idea-version since-build="181.*"/>
+
 
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor implementation="com.ytanikin.datasetnavigator.contributor.XmlPsiReferenceContributor" language="XML" id="my" order="first"/>

@@ -5,53 +5,42 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.PsiElementListCellRenderer
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
-import com.intellij.psi.impl.cache.CacheManager
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.UsageSearchContext
-import com.intellij.psi.xml.XmlFile
+import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
-import com.intellij.util.xml.DomManager
+import com.ytanikin.datasetnavigator.XmlHelper
 import javax.swing.Icon
 
 open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
 
     override fun collectNavigationMarkers(element: PsiElement, result: MutableCollection<in RelatedItemLineMarkerInfo<*>>) {
-        val tags = mutableListOf<XmlTag?>()
+        val tags = mutableListOf<XmlAttribute?>()
         if (element is XmlTag) {
             val entityId = element.getAttributeValue("ID") ?: return
-            val entityName = element.name
-            val entityNameWithId = "${entityName}_ID"
-            val xmlFiles = CacheManager.getInstance(element.getProject()).getFilesWithWord(
-                entityNameWithId, UsageSearchContext.ANY,
-                GlobalSearchScope.projectScope(element.getProject()), false
-            )
-                .filterIsInstance<XmlFile>()
-                .filter { "dataset" == it.rootTag?.name }
-            for (xmlFile in xmlFiles) {
+            val entityNameWithId = "${element.name}_ID"
+            for (xmlFile in XmlHelper.getXmlFilesWithWord(entityNameWithId, element.project)) {
                 for (subTag in xmlFile.rootTag?.subTags!!) {
                     val attribute = subTag.getAttribute(entityNameWithId)
                     if (entityId == attribute?.value) {
-                        tags.add(subTag)
+                        tags.add(attribute)
                     }
                 }
             }
             if (tags.isEmpty()) return
             val subIcon = NavigationGutterIconBuilder.create(AllIcons.Actions.Download)
                 .setTargets(tags)
-                .setTooltipText("Find usages of " + element.name + " " + element.getAttribute("ID"))
-                .setCellRenderer(MyListCellRenderer.INSTANCE)
+                .setTooltipText("Find usages of " + element.name + " " + (element.getAttribute("ID")?.text ?: ""))
+                .setCellRenderer(XmlCellRenderer.INSTANCE)
             result.add(subIcon.createLineMarkerInfo(element))
         }
     }
 
-    private class MyListCellRenderer : PsiElementListCellRenderer<XmlTag>() {
-        override fun getElementText(tag: XmlTag): String {
-            return tag.name + " " + (tag.getAttribute("ID")?.text ?: "")
+    private class XmlCellRenderer : PsiElementListCellRenderer<XmlAttribute>() {
+        override fun getElementText(tag: XmlAttribute): String {
+            return tag.parent.name + " " + (tag.parent.getAttribute("ID")?.text ?: "")
         }
 
-        override fun getContainerText(element: XmlTag, name: String): String? {
+        override fun getContainerText(element: XmlAttribute, name: String): String? {
             return null
         }
 
@@ -64,7 +53,7 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
         }
 
         companion object {
-            val INSTANCE = MyListCellRenderer()
+            val INSTANCE = XmlCellRenderer()
         }
     }
 }

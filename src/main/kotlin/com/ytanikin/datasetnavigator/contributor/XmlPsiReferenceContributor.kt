@@ -1,48 +1,35 @@
 package com.ytanikin.datasetnavigator.contributor
 
-import com.intellij.openapi.project.Project
 import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
-import com.intellij.psi.PsiReferenceRegistrar.HIGHER_PRIORITY
-import com.intellij.psi.impl.cache.CacheManager
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.xml.XmlAttribute
-import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
+import com.ytanikin.datasetnavigator.XmlHelper
 
 
 open class XmlPsiReferenceContributor : PsiReferenceContributor() {
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
-        registrar.registerReferenceProvider(ID_PATTERN, ID_REFERENCE_CONTRIBUTOR, HIGHER_PRIORITY)
-        registrar.registerReferenceProvider(ENTITY_PATTERN, ENTITY_REFERENCE_CONTRIBUTOR, HIGHER_PRIORITY)
-        registrar.registerReferenceProvider(FOREIGN_KEY_PATTERN, FOREIGN_KEY_REFERENCE_CONTRIBUTOR, HIGHER_PRIORITY)
+        registrar.registerReferenceProvider(ID_PATTERN, ID_REFERENCE_CONTRIBUTOR,  100000000.0)
+        registrar.registerReferenceProvider(ENTITY_PATTERN, ENTITY_REFERENCE_CONTRIBUTOR,  10000000000.0)
+        registrar.registerReferenceProvider(FOREIGN_KEY_PATTERN, FOREIGN_KEY_REFERENCE_CONTRIBUTOR,  100000000000000.0)
     }
 
     private class IdPsiReferenceProvider : PsiReferenceProvider() {
 
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-            val usages = mutableListOf<XmlAttribute>()
+            val usages = mutableListOf<XmlTag>()
             if (element is XmlAttribute) {
                 val entityName = element.parent.name
                 val id = element.value
                 val entityWithId = "${entityName}_ID"
-                val cacheManager = CacheManager.getInstance(element.getProject())
-                val xmlFiles = cacheManager.getFilesWithWord(
-                    entityWithId, UsageSearchContext.ANY,
-                    GlobalSearchScope.projectScope(element.getProject()), true
-                )
-                    .filterIsInstance<XmlFile>()
-                    .filter { it.rootTag != null }
-
-                for (xmlFile in xmlFiles) {
+                for (xmlFile in XmlHelper.getXmlFilesWithWord(entityWithId, element.project)) {
                     for (tag in xmlFile.rootTag?.subTags!!) {
                         val attribute = tag.getAttribute(entityWithId)
                         if (attribute != null && attribute.value == id) {
-                            usages.add(attribute)
+                            usages.add(tag)
                         }
                     }
                 }
@@ -54,18 +41,16 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
     private class EntityAttributePsiReferenceProvider : PsiReferenceProvider() {
 
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-            val usages = mutableListOf<XmlAttribute>()
+            val usages = mutableListOf<XmlTag>()
             if (element is XmlTag) {
-                val entityName = element.name
                 val id = element.getAttributeValue("ID") ?: return PsiReference.EMPTY_ARRAY
-                val entityWithId = "${entityName}_ID"
-                val xmlFiles = getXmlFilesWithWord(entityWithId, element.project)
+                val entityWithId = "${element.name}_ID"
 
-                for (xmlFile in xmlFiles) {
+                for (xmlFile in XmlHelper.getXmlFilesWithWord(entityWithId, element.project)) {
                     for (tag in xmlFile.rootTag?.subTags!!) {
                         val attribute = tag.getAttribute(entityWithId)
                         if (attribute != null && attribute.value == id) {
-                            usages.add(attribute)
+                            usages.add(tag)
                         }
                     }
                 }
@@ -82,8 +67,7 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
                 val foreignKeyName = element.name
                 val id = element.value
                 val entityName = foreignKeyName.substringBefore("_ID")
-                val xmlFiles = getXmlFilesWithWord(entityName, element.getProject())
-                for (xmlFile in xmlFiles) {
+                for (xmlFile in XmlHelper.getXmlFilesWithWord(entityName, element.getProject())) {
                     for (tag in xmlFile.rootTag?.subTags!!) {
                         if (tag.name == entityName && tag.getAttributeValue("ID") == id) {
                             targets.add(tag)
@@ -114,15 +98,7 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
         private val ENTITY_REFERENCE_CONTRIBUTOR = EntityAttributePsiReferenceProvider()
         private val FOREIGN_KEY_REFERENCE_CONTRIBUTOR = ForeignKeyPsiReferenceProvider()
 
-        private fun getXmlFilesWithWord(entityName: String, project: Project): List<XmlFile> {
-            val cacheManager = CacheManager.getInstance(project)
-            val filesWithWord = cacheManager.getFilesWithWord(
-                entityName, UsageSearchContext.ANY,
-                GlobalSearchScope.projectScope(project), true
-            )
-            val xmlFiles = filesWithWord.filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == "dataset" }
-            return xmlFiles
-        }
+
     }
     //<!DOCTYPE  dataset [<!ELEMENT dataset (ANY)>]>
 }

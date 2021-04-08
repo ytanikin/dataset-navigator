@@ -1,7 +1,8 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# xml-dataset-walker Changelog
+# dataset-navigator Changelog
 
 ## [Unreleased]
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Navigation across dataset XML files using GoTo
+- Go to usages in a gutter panel

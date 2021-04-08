@@ -1,4 +1,4 @@
-# xml-dataset-walker
+# dataset-navigator
 
 ![Build](https://github.com/ytanikin/xml-walker/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
@@ -34,7 +34,6 @@ To keep everything working, do not remove `<!-- ... -->` sections.
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
----
-Plugin based on the [IntelliJ Platform Plugin Template][template].
+## License
 
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
+[GPL © cdgeass.](LICENSE)
