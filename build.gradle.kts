@@ -85,6 +85,7 @@ tasks {
         untilBuild(properties("pluginUntilBuild"))
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
+/*
         pluginDescription(
             closure {
                 File("./README.md").readText().lines().run {
@@ -98,6 +99,7 @@ tasks {
                 }.joinToString("\n").run { markdownToHTML(this) }
             }
         )
+*/
 
         // Get the latest available change notes from the changelog file
         changeNotes(
