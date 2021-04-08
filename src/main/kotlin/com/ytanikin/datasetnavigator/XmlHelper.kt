@@ -7,11 +7,15 @@ import com.intellij.psi.search.UsageSearchContext
 import com.intellij.psi.xml.XmlFile
 
 object XmlHelper {
-    fun getXmlFilesWithWord(entityName: String, project: Project): List<XmlFile> {
+    const val DATASET_ROOT_TAG = "dataset"
+    const val ID_POSTFIX = "_ID"
+    const val ID_ATTRIBUTE = "ID"
+
+    fun getXmlFilesWithWord(word: String, project: Project): List<XmlFile> {
         val filesWithWord = CacheManager.getInstance(project).getFilesWithWord(
-            entityName, UsageSearchContext.ANY,
+            word, UsageSearchContext.ANY,
             GlobalSearchScope.projectScope(project), true
         )
-        return filesWithWord.filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == "dataset" }
+        return filesWithWord.filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == DATASET_ROOT_TAG }
     }
 }

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable
 class XmlPsiElementListCellRenderer : PsiElementListCellRenderer<PsiElement>() {
     override fun getElementText(element: PsiElement?): String {
         if (element is PsiNamedElement) {
-            val name: @Nullable String? = element.name
+            val name: String? = element.name
             return name ?: ""
         }
         return element!!.text

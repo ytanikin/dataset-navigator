@@ -9,6 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
+import com.ytanikin.datasetnavigator.XmlHelper.ID_POSTFIX
 import kotlin.streams.toList
 
 class XmlReference(element: PsiElement, private val targets: List<PsiElement?>) :
@@ -53,9 +54,9 @@ class XmlReference(element: PsiElement, private val targets: List<PsiElement?>) 
 class MyReference(element: PsiElement) : PsiReferenceBase<PsiElement>(element) {
 
     override fun resolve(): PsiElement? {
-        val xmlAttribute = (PsiTreeUtil.findFirstParent(element) { it is XmlAttribute && it.name.endsWith("_ID") }
+        val xmlAttribute = (PsiTreeUtil.findFirstParent(element) { it is XmlAttribute && it.name.endsWith(ID_POSTFIX) }
             ?: return null) as XmlAttribute
-        val name = xmlAttribute.name.substringBefore("_ID")
+        val name = xmlAttribute.name.substringBefore(ID_POSTFIX)
 
         if (element.containingFile !is XmlFile) return null
         val xmlFile = element.containingFile as XmlFile

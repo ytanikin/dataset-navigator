@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.ytanikin.datasetnavigator.XmlHelper
+import com.ytanikin.datasetnavigator.XmlHelper.ID_ATTRIBUTE
 import javax.swing.Icon
 
 open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
@@ -16,8 +17,8 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
     override fun collectNavigationMarkers(element: PsiElement, result: MutableCollection<in RelatedItemLineMarkerInfo<*>>) {
         val tags = mutableListOf<XmlAttribute?>()
         if (element is XmlTag) {
-            val entityId = element.getAttributeValue("ID") ?: return
-            val entityNameWithId = "${element.name}_ID"
+            val entityId = element.getAttributeValue(ID_ATTRIBUTE) ?: return
+            val entityNameWithId = "${element.name}${XmlHelper.ID_POSTFIX}"
             for (xmlFile in XmlHelper.getXmlFilesWithWord(entityNameWithId, element.project)) {
                 for (subTag in xmlFile.rootTag?.subTags!!) {
                     val attribute = subTag.getAttribute(entityNameWithId)
@@ -29,7 +30,7 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
             if (tags.isEmpty()) return
             val subIcon = NavigationGutterIconBuilder.create(AllIcons.Actions.Download)
                 .setTargets(tags)
-                .setTooltipText("Find usages of " + element.name + " " + (element.getAttribute("ID")?.text ?: ""))
+                .setTooltipText("Find usages of " + element.name + " " + (element.getAttribute(ID_ATTRIBUTE)?.text ?: ""))
                 .setCellRenderer(XmlCellRenderer.INSTANCE)
             result.add(subIcon.createLineMarkerInfo(element))
         }
@@ -37,7 +38,7 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
 
     private class XmlCellRenderer : PsiElementListCellRenderer<XmlAttribute>() {
         override fun getElementText(tag: XmlAttribute): String {
-            return tag.parent.name + " " + (tag.parent.getAttribute("ID")?.text ?: "")
+            return tag.parent.name + " " + (tag.parent.getAttribute(ID_ATTRIBUTE)?.text ?: "")
         }
 
         override fun getContainerText(element: XmlAttribute, name: String): String? {
