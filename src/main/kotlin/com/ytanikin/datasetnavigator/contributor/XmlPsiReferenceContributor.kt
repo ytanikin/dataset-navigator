@@ -6,15 +6,13 @@ import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
 import com.intellij.psi.PsiReferenceRegistrar.HIGHER_PRIORITY
 import com.intellij.psi.xml.XmlAttribute
-import com.intellij.psi.xml.XmlElement
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
 import com.ytanikin.datasetnavigator.XmlHelper
 import com.ytanikin.datasetnavigator.XmlHelper.DATASET_ROOT_TAG
 import com.ytanikin.datasetnavigator.XmlHelper.ID_ATTRIBUTE
 import com.ytanikin.datasetnavigator.XmlHelper.ID_POSTFIX
-import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
+import com.ytanikin.datasetnavigator.XmlHelper.findUsages
 
 
 open class XmlPsiReferenceContributor : PsiReferenceContributor() {
@@ -26,34 +24,25 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
     }
 
     private class IdPsiReferenceProvider : PsiReferenceProvider() {
-
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-            if (element is XmlAttribute) {
-                return arrayOf(XmlReference(element, findUsages(element, element.value, element.parent.name)))
-            }
-            return PsiReference.EMPTY_ARRAY
+            if (element !is XmlAttribute) return PsiReference.EMPTY_ARRAY
+            return arrayOf(XmlReference(element, findUsages(element, element.parent.name, element.value)))
         }
     }
 
     private class EntityAttributePsiReferenceProvider : PsiReferenceProvider() {
-
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-            if (element is XmlTag) {
-                val id = element.getAttributeValue(ID_ATTRIBUTE) ?: return PsiReference.EMPTY_ARRAY
-                return arrayOf(XmlReference(element, findUsages(element, id, element.name)))
-            }
-            return PsiReference.EMPTY_ARRAY
+            if (element !is XmlTag) return PsiReference.EMPTY_ARRAY
+            val id = element.getAttributeValue(ID_ATTRIBUTE) ?: return PsiReference.EMPTY_ARRAY
+            return arrayOf(XmlReference(element, findUsages(element, element.name, id)))
         }
     }
 
-    internal class ForeignKeyPsiReferenceProvider : PsiReferenceProvider() {
-
+    class ForeignKeyPsiReferenceProvider : PsiReferenceProvider() {
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-            if (element is XmlAttribute) {
-                val entityName = element.name.substringBefore(ID_POSTFIX)
-                return arrayOf(XmlReference(element, findDeclarations(entityName, element.value, element.project)))
-            }
-            return PsiReference.EMPTY_ARRAY
+            if (element !is XmlAttribute) return PsiReference.EMPTY_ARRAY
+            val entityName = element.name.substringBefore(ID_POSTFIX)
+            return arrayOf(XmlReference(element, findDeclarations(entityName, element.value, element.project)))
         }
 
         private fun findDeclarations(entityName: String, id: String?, project: Project): List<XmlTag> {
@@ -87,21 +76,6 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
         private val ID_REFERENCE_CONTRIBUTOR = IdPsiReferenceProvider()
         private val ENTITY_REFERENCE_CONTRIBUTOR = EntityAttributePsiReferenceProvider()
         private val FOREIGN_KEY_REFERENCE_CONTRIBUTOR = ForeignKeyPsiReferenceProvider()
-
-        private fun findUsages(element: XmlElement, id: @Nullable String?, entityName: @NotNull String): List<XmlTag> {
-            val usages = mutableListOf<XmlTag>()
-            val entityAndId = "${entityName}$ID_POSTFIX"
-            for (xmlFile in XmlHelper.getXmlFilesWithWord(entityAndId, element.project)) {
-                for (tag in xmlFile.rootTag?.subTags!!) {
-                    val attribute = tag.getAttribute(entityAndId)
-                    if (attribute != null && attribute.value == id) {
-                        usages.add(tag)
-                    }
-                }
-            }
-            return usages
-        }
-
     }
     //<!DOCTYPE  dataset [<!ELEMENT dataset (ANY)>]>
 }
