@@ -1,6 +1,5 @@
 package com.ytanikin.datasetnavigator.contributor
 
-import com.intellij.openapi.project.Project
 import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.*
@@ -8,10 +7,10 @@ import com.intellij.psi.PsiReferenceRegistrar.HIGHER_PRIORITY
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlTag
 import com.intellij.util.ProcessingContext
-import com.ytanikin.datasetnavigator.XmlHelper
 import com.ytanikin.datasetnavigator.XmlHelper.DATASET_ROOT_TAG
 import com.ytanikin.datasetnavigator.XmlHelper.ID_ATTRIBUTE
 import com.ytanikin.datasetnavigator.XmlHelper.ID_POSTFIX
+import com.ytanikin.datasetnavigator.XmlHelper.findDeclarations
 import com.ytanikin.datasetnavigator.XmlHelper.findUsages
 
 
@@ -26,7 +25,8 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
     private class IdPsiReferenceProvider : PsiReferenceProvider() {
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
             if (element !is XmlAttribute) return PsiReference.EMPTY_ARRAY
-            return arrayOf(XmlReference(element, findUsages(element, element.parent.name, element.value)))
+            val id = element.value ?: return PsiReference.EMPTY_ARRAY
+            return arrayOf(XmlReference(element, findUsages(element, element.parent.name, id)))
         }
     }
 
@@ -41,21 +41,11 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
     class ForeignKeyPsiReferenceProvider : PsiReferenceProvider() {
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
             if (element !is XmlAttribute) return PsiReference.EMPTY_ARRAY
+            val entityId = element.value ?: return PsiReference.EMPTY_ARRAY
             val entityName = element.name.substringBefore(ID_POSTFIX)
-            return arrayOf(XmlReference(element, findDeclarations(entityName, element.value, element.project)))
+            return arrayOf(XmlReference(element, findDeclarations(entityName, entityId, element.project)))
         }
 
-        private fun findDeclarations(entityName: String, id: String?, project: Project): List<XmlTag> {
-            val targets = mutableListOf<XmlTag>()
-            for (xmlFile in XmlHelper.getXmlFilesWithWord(entityName, project)) {
-                for (tag in xmlFile.rootTag?.subTags!!) {
-                    if (tag.name == entityName && tag.getAttributeValue(ID_ATTRIBUTE) == id) {
-                        targets.add(tag)
-                    }
-                }
-            }
-            return targets
-        }
     }
 
     companion object {
