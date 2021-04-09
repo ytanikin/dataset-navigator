@@ -11,7 +11,7 @@ import com.ytanikin.datasetnavigator.Utils.DATASET_ROOT_TAG
 import com.ytanikin.datasetnavigator.Utils.ID_ATTRIBUTE
 import com.ytanikin.datasetnavigator.Utils.ID_POSTFIX
 import com.ytanikin.datasetnavigator.Utils.findDeclarations
-import com.ytanikin.datasetnavigator.Utils.findUsages
+import com.ytanikin.datasetnavigator.Utils.findUsageTags
 
 
 open class XmlPsiReferenceContributor : PsiReferenceContributor() {
@@ -26,7 +26,7 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
             if (element !is XmlAttribute) return PsiReference.EMPTY_ARRAY
             val id = element.value ?: return PsiReference.EMPTY_ARRAY
-            return arrayOf(XmlReference(element, findUsages(element, element.parent.name, id)))
+            return arrayOf(XmlReference(element, findUsageTags(element, element.parent.name, id)))
         }
     }
 
@@ -34,7 +34,7 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
         override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
             if (element !is XmlTag) return PsiReference.EMPTY_ARRAY
             val id = element.getAttributeValue(ID_ATTRIBUTE) ?: return PsiReference.EMPTY_ARRAY
-            return arrayOf(XmlReference(element, findUsages(element, element.name, id)))
+            return arrayOf(XmlReference(element, findUsageTags(element, element.name, id)))
         }
     }
 
@@ -43,9 +43,8 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
             if (element !is XmlAttribute) return PsiReference.EMPTY_ARRAY
             val entityId = element.value ?: return PsiReference.EMPTY_ARRAY
             val entityName = element.name.substringBefore(ID_POSTFIX)
-            return arrayOf(XmlReference(element, findDeclarations(entityName, entityId, element.project)))
+            return arrayOf(XmlReference(element, findDeclarations(element.project, entityName, entityId)))
         }
-
     }
 
     companion object {
@@ -67,5 +66,4 @@ open class XmlPsiReferenceContributor : PsiReferenceContributor() {
         private val ENTITY_REFERENCE_CONTRIBUTOR = EntityAttributePsiReferenceProvider()
         private val FOREIGN_KEY_REFERENCE_CONTRIBUTOR = ForeignKeyPsiReferenceProvider()
     }
-    //<!DOCTYPE  dataset [<!ELEMENT dataset (ANY)>]>
 }

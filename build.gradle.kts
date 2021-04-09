@@ -1,8 +1,10 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.closure
+import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
+System.setProperty("user.dir", projectDir.toString())
 
 plugins {
     // Java support
@@ -53,7 +55,7 @@ changelog {
 
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
-/*detekt {
+detekt {
     config = files("./detekt-config.yml")
     buildUponDefaultConfig = true
 
@@ -62,7 +64,7 @@ changelog {
         xml.enabled = false
         txt.enabled = false
     }
-}*/
+}
 
 tasks {
     // Set the compatibility versions to 1.8
@@ -79,15 +81,13 @@ tasks {
     }
 
     patchPluginXml {
-//        version(properties("pluginVersion"))
-//        sinceBuild(properties("pluginSinceBuild"))
-//        untilBuild(properties("pluginUntilBuild"))
+        version(properties("pluginVersion"))
+        sinceBuild(properties("pluginSinceBuild"))
+        untilBuild(properties("pluginUntilBuild"))
 
-        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-/*
         pluginDescription(
             closure {
-                File("./README.md").readText().lines().run {
+                File("C:/data/dataset-navigator/README.md").readText().lines().run {
                     val start = "<!-- Plugin description -->"
                     val end = "<!-- Plugin description end -->"
 
@@ -98,7 +98,6 @@ tasks {
                 }.joinToString("\n").run { markdownToHTML(this) }
             }
         )
-*/
 
         // Get the latest available change notes from the changelog file
         changeNotes(

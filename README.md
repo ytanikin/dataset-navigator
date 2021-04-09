@@ -14,11 +14,14 @@
 - [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+The plugin allows navigating across XML dataset files
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
+NB! In order plugin works correctly XML should be well-formed, e.g. XML declaration should be defined correctly.
+ Correct XML declarations 
+<kbd><?xml version='1.0' encoding='UTF-8'?> 
+<!DOCTYPE dataset> or <!DOCTYPE dataset SYSTEM "path to dtd"> or <!DOCTYPE dataset PUBLIC "//Comany DTD" "http://company.com/bindings/export.dtd">  
+</kbd>
 <!-- Plugin description end -->
 
 ## Installation

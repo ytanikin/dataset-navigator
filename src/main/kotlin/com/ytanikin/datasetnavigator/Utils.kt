@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.impl.cache.CacheManager
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.UsageSearchContext
+import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlElement
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
@@ -13,7 +14,7 @@ object Utils {
     const val ID_POSTFIX = "_ID"
     const val ID_ATTRIBUTE = "ID"
 
-    fun findUsages(element: XmlElement, entityName: String, id: String): List<XmlTag> {
+    fun findUsageTags(element: XmlElement, entityName: String, id: String): List<XmlTag> {
         val usages = mutableListOf<XmlTag>()
         val entityAndId = "${entityName}$ID_POSTFIX"
         for (xmlFile in getXmlFilesWithWord(entityAndId, element.project)) {
@@ -27,7 +28,21 @@ object Utils {
         return usages
     }
 
-    fun findDeclarations(entityName: String, entityId: String, project: Project): List<XmlTag> {
+    fun findUsageAttributes(element: XmlElement, entityName: String, id: String): List<XmlAttribute> {
+        val usages = mutableListOf<XmlAttribute>()
+        val entityAndId = "${entityName}$ID_POSTFIX"
+        for (xmlFile in getXmlFilesWithWord(entityAndId, element.project)) {
+            for (tag in xmlFile.rootTag?.subTags!!) {
+                val attribute = tag.getAttribute(entityAndId)
+                if (attribute != null && attribute.value == id) {
+                    usages.add(attribute)
+                }
+            }
+        }
+        return usages
+    }
+
+    fun findDeclarations(project: Project, entityName: String, entityId: String): List<XmlTag> {
         val declarations = mutableListOf<XmlTag>()
         for (xmlFile in getXmlFilesWithWord(entityName, project)) {
             for (tag in xmlFile.rootTag?.subTags!!) {
@@ -41,8 +56,8 @@ object Utils {
 
     private fun getXmlFilesWithWord(word: String, project: Project): List<XmlFile> {
         val filesWithWord = CacheManager.getInstance(project).getFilesWithWord(
-            word, UsageSearchContext.ANY,
-            GlobalSearchScope.projectScope(project), true
+            word, UsageSearchContext.IN_PLAIN_TEXT,
+            GlobalSearchScope.projectScope(project), false
         )
         return filesWithWord.filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == DATASET_ROOT_TAG }
     }
