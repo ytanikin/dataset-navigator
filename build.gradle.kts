@@ -1,6 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.closure
-import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -54,7 +53,7 @@ changelog {
 
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
-detekt {
+/*detekt {
     config = files("./detekt-config.yml")
     buildUponDefaultConfig = true
 
@@ -63,7 +62,7 @@ detekt {
         xml.enabled = false
         txt.enabled = false
     }
-}
+}*/
 
 tasks {
     // Set the compatibility versions to 1.8

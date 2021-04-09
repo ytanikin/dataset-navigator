@@ -43,8 +43,8 @@ class XmlReference(element: PsiElement, private val targets: List<PsiElement?>) 
     }
 
     override fun getValue(): String {
-        val text = myElement!!.text
-        val range = rangeInElement
+//        val text = myElement!!.text
+//        val range = rangeInElement
         return "asdfasdf"
     }
 
