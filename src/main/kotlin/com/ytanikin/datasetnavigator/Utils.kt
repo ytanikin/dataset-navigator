@@ -9,57 +9,55 @@ import com.intellij.psi.xml.XmlElement
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
 
-object Utils {
-    const val DATASET_ROOT_TAG = "dataset"
-    const val ID_POSTFIX = "_ID"
-    const val ID_ATTRIBUTE = "ID"
 
-    fun findUsageTags(element: XmlElement, entityName: String, id: String): List<XmlTag> {
-        val usages = mutableListOf<XmlTag>()
-        val entityAndId = "${entityName}$ID_POSTFIX"
-        for (xmlFile in getXmlFilesWithWord(entityAndId, element.project)) {
-            for (tag in xmlFile.rootTag?.subTags!!) {
-                val attribute = tag.getAttribute(entityAndId)
-                if (attribute != null && attribute.value == id) {
-                    usages.add(tag)
-                }
+const val DATASET_ROOT_TAG = "dataset"
+const val ID_POSTFIX = "_ID" // TODO: 11.04.2021 take care of lower case
+const val ID_ATTRIBUTE = "ID"
+
+fun findUsageTags(element: XmlElement, entityName: String, id: String): List<XmlTag> {
+    val usages = mutableListOf<XmlTag>()
+    val entityAndId = "${entityName}$ID_POSTFIX"
+    for (xmlFile in getXmlFilesWithWord(entityAndId, element.project)) {
+        for (tag in xmlFile.rootTag?.subTags!!) {
+            val attribute = tag.getAttribute(entityAndId)
+            if (attribute != null && attribute.value == id) {
+                usages.add(tag)
             }
         }
-        return usages
     }
+    return usages
+}
 
-    fun findUsageAttributes(element: XmlElement, entityName: String, id: String): List<XmlAttribute> {
-        val usages = mutableListOf<XmlAttribute>()
-        val entityAndId = "${entityName}$ID_POSTFIX"
-        for (xmlFile in getXmlFilesWithWord(entityAndId, element.project)) {
-            for (tag in xmlFile.rootTag?.subTags!!) {
-                val attribute = tag.getAttribute(entityAndId)
-                if (attribute != null && attribute.value == id) {
-                    usages.add(attribute)
-                }
+fun findUsageAttributes(element: XmlElement, entityName: String, id: String): List<XmlAttribute> {
+    val usages = mutableListOf<XmlAttribute>()
+    val entityAndId = "${entityName}$ID_POSTFIX"
+    for (xmlFile in getXmlFilesWithWord(entityAndId, element.project)) {
+        for (tag in xmlFile.rootTag?.subTags!!) {
+            val attribute = tag.getAttribute(entityAndId)
+            if (attribute != null && attribute.value == id) {
+                usages.add(attribute)
             }
         }
-        return usages
     }
+    return usages
+}
 
-    fun findDeclarations(project: Project, entityName: String, entityId: String): List<XmlTag> {
-        val declarations = mutableListOf<XmlTag>()
-        for (xmlFile in getXmlFilesWithWord(entityName, project)) {
-            for (tag in xmlFile.rootTag?.subTags!!) {
-                if (tag.name == entityName && tag.getAttributeValue(ID_ATTRIBUTE) == entityId) {
-                    declarations.add(tag)
-                }
+fun findDeclarations(project: Project, entityName: String, entityId: String): List<XmlTag> {
+    val declarations = mutableListOf<XmlTag>()
+    for (xmlFile in getXmlFilesWithWord(entityName, project)) {
+        for (tag in xmlFile.rootTag?.subTags!!) {
+            if (tag.name == entityName && tag.getAttributeValue(ID_ATTRIBUTE) == entityId) {
+                declarations.add(tag)
             }
         }
-        return declarations
     }
+    return declarations
+}
 
-    private fun getXmlFilesWithWord(word: String, project: Project): List<XmlFile> {
-        val filesWithWord = CacheManager.getInstance(project).getFilesWithWord(
-            word, UsageSearchContext.IN_PLAIN_TEXT, //lucene solar
-            GlobalSearchScope.projectScope(project), false
-        )
-        return filesWithWord.filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == DATASET_ROOT_TAG }
-    }
-
+private fun getXmlFilesWithWord(word: String, project: Project): List<XmlFile> {
+    val filesWithWord = CacheManager.getInstance(project).getFilesWithWord(
+        word, UsageSearchContext.IN_PLAIN_TEXT, //lucene solar
+        GlobalSearchScope.projectScope(project), false
+    )
+    return filesWithWord.filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == DATASET_ROOT_TAG }
 }

@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttribute
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
-import com.ytanikin.datasetnavigator.Utils.ID_POSTFIX
+import com.ytanikin.datasetnavigator.ID_POSTFIX
 
 class XmlReference(element: PsiElement, private val targets: List<PsiElement?>) :
     PsiReferenceBase<PsiElement?>(element, TextRange(0, element.text.length + 3)), PsiPolyVariantReference {
