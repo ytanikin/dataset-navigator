@@ -40,7 +40,7 @@ intellij {
     version = properties("platformVersion")
     type = properties("platformType")
     downloadSources = properties("platformDownloadSources").toBoolean()
-    updateSinceUntilBuild = true
+//    updateSinceUntilBuild = true
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     setPlugins(*properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
@@ -82,12 +82,12 @@ tasks {
 
     patchPluginXml {
         version(properties("pluginVersion"))
-        sinceBuild(properties("pluginSinceBuild"))
-        untilBuild(properties("pluginUntilBuild"))
+        sinceBuild("202.*")
+//        untilBuild(properties("pluginUntilBuild"))
 
         pluginDescription(
             closure {
-                File("C:/data/dataset-navigator/README.md").readText().lines().run {
+                File("./README.md").readText().lines().run {
                     val start = "<!-- Plugin description -->"
                     val end = "<!-- Plugin description end -->"
 
@@ -107,9 +107,9 @@ tasks {
         )
     }
 
-    runPluginVerifier {
-        ideVersions(properties("pluginVerifierIdeVersions"))
-    }
+//    runPluginVerifier {
+//        ideVersions(properties("pluginVerifierIdeVersions"))
+//    }
 
     publishPlugin {
         dependsOn("patchChangelog")

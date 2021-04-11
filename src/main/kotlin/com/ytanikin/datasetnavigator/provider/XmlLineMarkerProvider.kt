@@ -19,25 +19,27 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
         val entityId = element.getAttributeValue(ID_ATTRIBUTE) ?: return
         val usages = findUsageAttributes(element, element.name, entityId)
         if (usages.isEmpty()) return
-        val subIcon = NavigationGutterIconBuilder.create(AllIcons.Actions.FindForward)
-            .setTargets(usages)
-            .setTooltipText("Find usages of ${element.name} ${element.getAttribute(ID_ATTRIBUTE)?.text ?: ""}")
-            .setCellRenderer(XmlCellRenderer.INSTANCE)
-        result.add(subIcon.createLineMarkerInfo(element.navigationElement))
+        result.add(
+            NavigationGutterIconBuilder.create(AllIcons.FileTypes.Xml)
+                .setTargets(usages)
+                .setTooltipText("Find usages of ${element.name} with ${element.getAttribute(ID_ATTRIBUTE)?.text ?: ""}")
+                .setCellRenderer(XmlCellRenderer.INSTANCE)
+                .createLineMarkerInfo(element)
+        )
     }
 
     private class XmlCellRenderer : PsiElementListCellRenderer<XmlAttribute>() {
         override fun getElementText(tag: XmlAttribute): String {
-            return tag.parent.name + " " + (tag.parent.getAttribute(ID_ATTRIBUTE)?.text ?: "")
+            return tag.parent.name
         }
 
         override fun getContainerText(tag: XmlAttribute, name: String): String {
             val attribute = tag.parent.getAttribute(ID_ATTRIBUTE)
-            var hint = ""
+            var hint =  (attribute?.text ?: "")
             for (attr in tag.parent.attributes) {
                 if (attr == attribute) continue
                 hint += " ${attr.text}"
-                if (hint.length > 70) break
+                if (hint.length > 80) break
             }
             return hint
         }

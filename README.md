@@ -1,4 +1,4 @@
-# dataset-navigator
+﻿# dataset-navigator
 
 ![Build](https://github.com/ytanikin/xml-walker/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
@@ -15,13 +15,17 @@
 
 <!-- Plugin description -->
 
-The plugin allows navigating across XML dataset files
+The plugin allows navigating across XML dataset files.<br>
+Use GoTo shortcuts <kbd>Ctrl + B</kbd> <kbd>Ctrl + Left Click</kbd> <kbd>Alt + F7</kbd> <kbd>Mouse Wheel Click</kbd>
 
-NB! In order plugin works correctly XML should be well-formed, e.g. XML declaration should be defined correctly.
- Correct XML declarations 
-<kbd><?xml version='1.0' encoding='UTF-8'?> 
-<!DOCTYPE dataset> or <!DOCTYPE dataset SYSTEM "path to dtd"> or <!DOCTYPE dataset PUBLIC "//Comany DTD" "http://company.com/bindings/export.dtd">  
-</kbd>
+<br>__NB!__ In order the plugin works correctly XML should be well-formed, e.g. XML declaration should be defined correctly. 
+Xml files with dataset must have a <!DOCTYPE> declaration
+```
+<!DOCTYPE dataset>
+<!DOCTYPE dataset [<!ELEMENT dataset (ANY)>]>
+<!DOCTYPE dataset SYSTEM "./export.dtd"> 
+<!DOCTYPE dataset PUBLIC "//Company DTD" "https://company.com/bindings/export.dtd">  
+```
 <!-- Plugin description end -->
 
 ## Installation
