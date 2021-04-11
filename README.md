@@ -18,14 +18,6 @@
 The plugin allows navigating across XML dataset files.<br>
 Use GoTo shortcuts <kbd>Ctrl + B</kbd> <kbd>Ctrl + Left Click</kbd> <kbd>Alt + F7</kbd> <kbd>Mouse Wheel Click</kbd>
 
-<br>__NB!__ In order the plugin works correctly XML should be well-formed, e.g. XML declaration should be defined correctly. 
-Xml files with dataset must have a <!DOCTYPE> declaration
-```
-<!DOCTYPE dataset>
-<!DOCTYPE dataset [<!ELEMENT dataset (ANY)>]>
-<!DOCTYPE dataset SYSTEM "./export.dtd"> 
-<!DOCTYPE dataset PUBLIC "//Company DTD" "https://company.com/bindings/export.dtd">  
-```
 <!-- Plugin description end -->
 
 ## Installation

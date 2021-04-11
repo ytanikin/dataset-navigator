@@ -9,25 +9,18 @@ System.setProperty("user.dir", projectDir.toString())
 plugins {
     // Java support
     id("java")
-    // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.4.31"
-    // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "0.7.2"
-    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.1.2"
-    // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
-    // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
 }
 
 group = properties("pluginGroup")
 version = properties("pluginVersion")
 
-// Configure project's dependencies
 repositories {
     mavenCentral()
-    jcenter()
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
@@ -40,7 +33,7 @@ intellij {
     version = properties("platformVersion")
     type = properties("platformType")
     downloadSources = properties("platformDownloadSources").toBoolean()
-//    updateSinceUntilBuild = true
+    updateSinceUntilBuild = true
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     setPlugins(*properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
@@ -82,12 +75,12 @@ tasks {
 
     patchPluginXml {
         version(properties("pluginVersion"))
-        sinceBuild("202.*")
-//        untilBuild(properties("pluginUntilBuild"))
+        sinceBuild(properties("pluginSinceBuild"))
+        untilBuild(properties("pluginUntilBuild"))
 
         pluginDescription(
             closure {
-                File("./README.md").readText().lines().run {
+                File("C:/data/dataset-navigator/README.md").readText().lines().run {
                     val start = "<!-- Plugin description -->"
                     val end = "<!-- Plugin description end -->"
 
@@ -107,9 +100,9 @@ tasks {
         )
     }
 
-//    runPluginVerifier {
-//        ideVersions(properties("pluginVerifierIdeVersions"))
-//    }
+    runPluginVerifier {
+        ideVersions(properties("pluginVerifierIdeVersions"))
+    }
 
     publishPlugin {
         dependsOn("patchChangelog")
