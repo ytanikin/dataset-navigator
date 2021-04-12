@@ -39,7 +39,7 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
             for (attr in tag.parent.attributes) {
                 if (attr == attribute) continue
                 hint += " ${attr.text}"
-                if (hint.length > 80) break
+                if (hint.length > 90) break
             }
             return hint
         }
@@ -49,7 +49,7 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
         }
 
         override fun getIconFlags(): Int {
-            return 1
+            return 0
         }
 
         companion object {
