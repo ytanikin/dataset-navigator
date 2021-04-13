@@ -57,7 +57,7 @@ fun findDeclarations(project: Project, entityName: String, entityId: String): Li
 
 private fun getXmlFilesWithWord(word: String, project: Project): List<XmlFile> {
     return CacheManager.getInstance(project).getFilesWithWord(
-        word, UsageSearchContext.ANY, //lucene solar
+        word, UsageSearchContext.IN_PLAIN_TEXT, //lucene solar
         GlobalSearchScope.projectScope(project), false
     ).filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == DATASET_ROOT_TAG }
 }
