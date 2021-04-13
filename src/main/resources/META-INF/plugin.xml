@@ -2,15 +2,11 @@
     <id>com.ytanikin.datasetnavigator</id>
     <name>Dataset Navigator</name>
     <vendor>ytanikin</vendor>
-<!--    <version>0.0.2</version>-->
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-<!--    <depends>com.intellij.modules.xml</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
-<!--        <psi.referenceContributor implementation="com.ytanikin.datasetnavigator.contributor.XmlPsiReferenceContributor" language="XML" order="first"/>-->
-<!--        <gotoTargetRendererProvider implementation="com.ytanikin.datasetnavigator.contributor.XmlGotoTargetRendererProvider" order="first"/>-->
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.ytanikin.datasetnavigator.provider.XmlLineMarkerProvider"/>
         <gotoDeclarationHandler order="first" implementation="com.ytanikin.datasetnavigator.goto.XmlGoToDeclarationHandler"/>
     </extensions>

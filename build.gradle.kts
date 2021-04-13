@@ -21,6 +21,7 @@ version = properties("pluginVersion")
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
@@ -75,7 +76,7 @@ tasks {
 
     patchPluginXml {
         version(properties("pluginVersion"))
-        sinceBuild(properties("pluginSinceBuild"))
+//        sinceBuild(properties("pluginSinceBuild"))
 //        untilBuild(properties("pluginUntilBuild"))
 
         pluginDescription(

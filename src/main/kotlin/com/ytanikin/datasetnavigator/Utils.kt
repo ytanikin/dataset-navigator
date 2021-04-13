@@ -11,7 +11,7 @@ import com.intellij.psi.xml.XmlTag
 
 
 const val DATASET_ROOT_TAG = "dataset"
-const val ID_POSTFIX = "_ID" // TODO: 11.04.2021 take care of lower case
+const val ID_POSTFIX = "_ID"
 const val ID_ATTRIBUTE = "ID"
 const val ID_ATTRIBUTE_LOWER_CASE = "id"
 
@@ -57,7 +57,7 @@ fun findDeclarations(project: Project, entityName: String, entityId: String): Li
 
 private fun getXmlFilesWithWord(word: String, project: Project): List<XmlFile> {
     return CacheManager.getInstance(project).getFilesWithWord(
-        word, UsageSearchContext.IN_PLAIN_TEXT, //lucene solar
+        word, UsageSearchContext.ANY, //lucene solar
         GlobalSearchScope.projectScope(project), false
     ).filterIsInstance<XmlFile>().filter { it.rootTag != null && it.rootTag!!.name == DATASET_ROOT_TAG }
 }
