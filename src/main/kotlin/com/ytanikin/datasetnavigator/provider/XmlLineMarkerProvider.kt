@@ -49,8 +49,8 @@ open class XmlLineMarkerProvider : RelatedItemLineMarkerProvider() {
             return hint
         }
 
-        override fun getIcon(element: PsiElement): Icon {
-            return AllIcons.Xml.Html_id
+        override fun getIcon(element: PsiElement): Icon? {
+            return null
         }
 
         override fun getIconFlags(): Int {
