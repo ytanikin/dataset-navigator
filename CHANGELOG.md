@@ -3,7 +3,9 @@
 # dataset-navigator Changelog
 
 ## [Unreleased]
-Setup to navigate with implicit relationship between tables, such as CAR_NUMBER to CAR NUMBER
+- Provide the setup to navigate with implicit relationship between tables, such as CAR_NUMBER="A123" to CAR table with column NUMBER = "A123"
+- Navigating across SQL dataset files
+- Bunch refactoring of one table
 ### Added
-- Navigation across dataset XML files
-- Go to usages in a gutter panel
+- Find Usages and a Declaration
+- Go to usages in Gutter Panel with relevant information

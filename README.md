@@ -15,9 +15,9 @@
 
 <!-- Plugin description -->
 
-The plugin allows navigating across XML dataset files.<br>
-Use GoTo shortcuts <kbd>Ctrl + B</kbd> <kbd>Ctrl + Left Click</kbd> <kbd>Alt + F7</kbd> <kbd>Mouse Wheel Click</kbd>
+The plugin provides navigating across XML dataset files.
 
+So far, It uses obvious references to Foreign Keys, for instance PERSON_ID="1" relates to PERSON with ID = 1.
 <!-- Plugin description end -->
 
 ## Installation

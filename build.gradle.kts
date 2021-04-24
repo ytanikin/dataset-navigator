@@ -76,7 +76,7 @@ tasks {
 
     patchPluginXml {
         version(properties("pluginVersion"))
-//        sinceBuild(properties("pluginSinceBuild"))
+        sinceBuild(properties("pluginSinceBuild"))
 //        untilBuild(properties("pluginUntilBuild"))
 
         pluginDescription(
