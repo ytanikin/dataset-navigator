@@ -5,6 +5,11 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
 ## Template ToDo list
+- Provide the setup to navigate with implicit relationship between tables, such as CAR_NUMBER="A123" to CAR table with column NUMBER = "A123"
+- Navigating across SQL dataset files
+- Bunch refactoring of one table
+  
+
 - [x] Create a new [IntelliJ Platform Plugin Template][template] project.
 - [ ] Verify the [pluginGroup](/gradle.properties), [plugin ID](/src/main/resources/META-INF/plugin.xml) and [sources package](/src/main/kotlin).
 - [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html).

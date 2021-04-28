@@ -2,7 +2,7 @@
     <id>com.ytanikin.datasetnavigator</id>
     <name>Dataset Navigator</name>
     <vendor>ytanikin</vendor>
-    <version>0.3</version>
+    <version>0.4</version>
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
