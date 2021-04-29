@@ -22,7 +22,7 @@
 
 The plugin provides navigating across XML dataset files.
 
-So far, It uses obvious references to Foreign Keys, for instance PERSON_ID="1" relates to PERSON with ID = 1.
+It uses obvious references to Foreign Keys, for instance, PERSON_ID="1" relates to PERSON with ID = 1.
 <!-- Plugin description end -->
 
 ## Installation
