@@ -9,6 +9,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.ytanikin.datasetnavigator.provider.XmlLineMarkerProvider"/>
-        <gotoDeclarationHandler order="first" implementation="com.ytanikin.datasetnavigator.goto.XmlGoToDeclarationHandler"/>
+        <gotoDeclarationHandler order="first" implementation="com.ytanikin.datasetnavigator.gotodeclarationhandler.XmlGoToDeclarationHandler"/>
     </extensions>
 </idea-plugin>
